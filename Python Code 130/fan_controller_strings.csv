@@ -1,0 +1,67 @@
+FPRINTERR,Name
+SAS,TH1
+1650,TH2
+1080,TH3
+NIC,TH4
+TH5,TH5
+TH6,TH6
+TH7,TH7
+TH8,TH8
+--,--
+Top1: ,Fan1
+Top2: ,Fan2
+SAS:  ,Fan3
+---   ,Fan4
+Rear: ,Fan5
+Front:,Fan6
+Incr bright,Incr bright
+Dec bright,Dec bright
+Pause,Pause
+Power,Power
+RED,RED
+GREEN,GREEN
+BLUE,BLUE
+WHITE,WHITE
+Red 2,Red 2
+Green 2,Green 2
+Blue 2,Blue 2
+White 2,White 2
+Red 3,Red 3
+Green 3,Green 3
+Blue 3,Blue 3
+White 3,White 3
+Red 4,Red 4
+Green 4,Green 4
+Blue 4,Blue 4
+White 4,White 4
+Red 5,Red 5
+Green 5,Green 5
+Blue 5,Blue 5
+White 5,White 5
+Red Up,Red Up
+Green Up,Green Up
+Blue Up,Blue Up
+Speed Up,Speed Up
+Red Down,Red Down
+Green Down,Green Down
+Blue Down,Blue Down
+Speed Down,Speed Down
+DIY 1,DIY 1
+DIY 2,DIY 2
+DIY 3,DIY 3
+Auto,Auto
+DIY 4,DIY 4
+DIY 5,DIY 5
+DIY 6,DIY 6
+Flash,Flash
+Jump 3,Jump 3
+Jump 7,Jump 7
+Fade 3,Fade 3
+Fade 7,Fade 7
+IR ERR,IR ERR
+RPM ints,RPM ints
+Shutdown,Shutdown
+    Uptime:,Arduino Uptime
+:,Colon separator
+d ,days separator
+0,character zero

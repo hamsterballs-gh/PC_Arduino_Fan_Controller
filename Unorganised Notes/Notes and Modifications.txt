@@ -1,0 +1,36 @@
+
+
+########################################
+# Arduino Fan Controller Modifications #
+########################################
+
+Things that aren't in the other notes but may be important:
+
+1) Laziness
+	Currently, my organisation on this project is in shambles.
+	Documentation is imaginary, at best.
+
+2) Backpowering
+	If the connected USB port remains powered when PC is off, the Arduino will remain on.
+	Add a diode from the 12v molex to Vin on the Arduino
+	- this will prevent backpowering to the PC 12v rail.
+	Ideally, a reset trigger needs to be put in place when the 12v powers up on computer reboot.
+
+3) Wire bodging
+	As shown in one of the pictures, the output wiring from the ATTiny85s are wrong.
+	This requires a fix in the PCB design but this hasn't been done yet.
+
+4) Fritzing
+	The Adafruit parts library was used.
+	This may have been updated.
+
+5) Python libraries
+	Installation of psutil and GPUtil are required for pc_status_130 to display all information.
+	PySerial is used.
+
+6) Arduino libraries
+	LCD by Blackhawk
+	Adafruit BusIO and PWM driver for PCA9685
+	IRRemote
+	
+	

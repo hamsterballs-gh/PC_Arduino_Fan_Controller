@@ -1,0 +1,36 @@
+
+
+ATtiny85 reset fuse:
+
+Fuse calculator
+https://eleccelerator.com/fusecalc/fusecalc.php?chip=attiny85&ref=blog.wokwi.com
+LOW=E2   HIGH=5F   EXTENDED=FF   LOCKBIT=FF
+
+
+https://blog.wokwi.com/removing-a-curse-from-attiny85-fuses/
+
+
+https://forum.arduino.cc/t/disabling-reset-pin/558336/6
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// navigate to avrdude directory
+cd "C:\Program Files (x86)\Arduino\hardware\tools\avr\bin"
+
+// view the current fuse settings
+.\avrdude -C "C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" -c avrisp -p t85 -P COM7 -b 19200 -v
+
+// RSTDISBL !!  disable reset
+.\avrdude -C "C:\Program Files (x86)\Arduino\hardware\tools\avr\etc\avrdude.conf" -c avrisp -p t85 -P COM7 -b 19200 -v -U hfuse:w:0x57:m
+
+
+
+ATtiny PWM pins:
+
+Code and fixes are GOOD
+
+pwm 15 - in 1 - out 3 - fan 6
+pwm 15 - in 2 - out 5 - fan 5
+pwm 14 - in 7 - out 6 - fan 4
+
+pwm 13 - fan 3
+pwm 12 - fan 2
+pwm 11 - fan 1

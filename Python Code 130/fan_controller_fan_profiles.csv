@@ -1,0 +1,7 @@
+Profile Num,Profile Name,pwm,allow_off,max_voltage,changerate,hysteresis,last_temperature,last_fan_speed,target_fan_speed,default_temp,Factor 0,Factor 1,Factor 2,Factor 3,Factor 4,Factor 5,Factor 6,Factor 7,Temperature 0,Temperature 1,Temperature 2,Temperature 3,fan_speed 0,fan_speed 1,fan_speed 2,fan_speed 3
+1,Top 1,FALSE,TRUE,4095,50,2,20,2000,2000,50,0,1,2,2,0,0,0,0,55,60,65,70,1600,1700,2000,4000
+2,Top 2,FALSE,TRUE,4095,50,2,20,2000,2000,50,0,1,2,2,0,0,0,0,55,60,65,70,1600,1700,2000,4000
+3,SAS,FALSE,TRUE,1750,20,0,20,1400,1400,50,1,0,0,0,0,0,0,0,55,60,68,72,700,900,1300,1700
+4,Bottom,TRUE,FALSE,4095,50,2,20,2000,2000,40,0,1,1,1,0,0,0,0,30,50,60,70,2000,2200,2750,3100
+5,Corsair intake,TRUE,FALSE,4095,50,2,20,2000,2000,40,0,2,2,2,0,0,0,0,30,45,60,75,1400,2000,3000,4000
+6,Noctua 3000,TRUE,FALSE,4095,50,2,20,2000,2000,40,0,2,4,3,0,0,0,0,40,50,70,80,1900,2100,3000,4000

@@ -1,0 +1,6 @@
+Description,Low reading,Low value,High reading,High value
+Thermistor 1,128,0,830,100
+Thermistor 2,128,0,830,100
+Thermistor 3,128,0,830,100
+Thermistor 4,128,0,830,100
+LDR,0,0,1023,1023

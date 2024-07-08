@@ -1,0 +1,372 @@
+
+
+
+Fan controller interface:
+
+- Read FRAM, update stuff individually (code mostly done?)
+- TODO - Diagnose fan profile update not working
+- TODO - Update code for RGB profile writing - new vars might cause problems!
+
+- DONE - Serial Timeout in Arduino, more than 1000ms then reset
+
+
+
+
+
+TODO (- = not done, * = done, + = partly done):
+
+	- serial commands to trigger loading RGB and fan profiles
+	* IR control - don't override brightness and speed settings (has this been uploaded?)
+	- Optimise fprint, can we keep reading without specifying address?
+	
+	- Improve scheduler, prioritise high priority tasks and let others fall further behind
+		Currently extremely unlikely two tasks will clash and priority actually get used
+		Calculate 'importance' by (time behind * priority), select this way
+	
+	
+	- Python FRAM modules:
+		* Update RGB profiles
+		* Update fan profiles
+		- Update gamma table
+		* Update strings
+		- Update calibration values
+			- Default RGB profiles
+			- Default fan profiles
+	
+
+	+ PWM control is inverted, fix - temporarily bodged in code, reprogram ATtinies
+	* Write protect FRAM function
+	- Buzzer function
+	- Optimised LCD update?
+	* Allow set default stored profile - low addresses of FRAM
+	
+	- Default emergency settings:
+		- FRAM missing or wrong ver, have default fan speed, LEDs off, power LEDs dim
+		- EEPROM missing, disable backups
+		- Mux missing, infinite panic loop - confirm this still works?
+		- STARTUP:
+			* Attempt connection to everything
+			- If exists, set default values (LEDs and PWM, Fan DACs)
+			* Display permanent error message if something missing, do not enter mainloop
+			* Fix LCD not checked at startup, line 284
+		
+	FRAM:
+		* uint8 (int8, uint8, bool)
+		* uint16 (int16, uint16)
+		* float (float)
+		* Optimise FRAM - shared 'fram_request(address, num_bytes)' function
+		- Thermistor calibration values
+		- ~NOT NECESSARY~ light sensor calibration value ???
+		* Print FRAM string to LCD
+		* Print FRAM string to serial
+		* write code to generate bytes for profiles
+		* Update LOAD CONFIG to correct FRAM addresses
+	
+	Serial:
+		* Trigger load_config from serial
+		* RGB load profile from FRAM (Send channel and profile only)
+		* Fan load profile from FRAM (Send channel and profile only)
+		- Temperature timeout - if not updated for a period of time, fallback to
+		  relying only on temperature probes
+		* Custom LCD message sent from PC - 32 bytes ascii?
+			* Message timeout for reverting to normal display
+		* Enable/disable write protect for EEPROM and FRAM
+		* NON-BLOCKING SERIAL
+			* Serial timeout, if no comms for 1000ms reset serial functions
+		
+	
+	RGB:
+	 	* When static colour, colours up/down adjust current colour
+	 	* When random sequence, colours up/down adjust minimum random value of colour
+		* Power sets brightness to 0.0, restores brightness second press
+		* Pause sets rate to 0.0, resume previous rate on second press
+		- Optimise RGB profile RAM usage - get next colour from array in FRAM
+			- RGB sequence size
+			- Variables for last profile, last rate
+			- Pause sets rate to 0, unpause returns to saved previous rate
+		- Active channel selection - use bits for each channel, not int
+			getbits(rgb_channel, 1) etc.
+		- Remove setting profile rate when loading from FRAM?
+			
+			
+	Code checks:
+		* Serial can trigger all serial commands
+		- Loading config will read all configs and use them
+		* Ensure FRAM strings are used in place of serial/LCD print
+		* Revert RGB changerate change_led_rate to standard steps from previous ver
+		- Write FRAM - sends error on invalid address but Arduino not exit, fix
+		
+
+
+
+
+PCB v3.2 fixes:
+	- Fix capacitor wiring and incorrect resistor for 555
+	- Fix wiring for ATtiny85 PWM
+	- Use SATA power connector
+	- Diode for Arduino Vin
+	- Set correct resistor values in Fritzing file
+	- Power reset - 5v gated using reset switch to transistor?
+	- Remove enable input of PWM chip, no need for it - use for shutdown detection?
+	- Pullup resistor for DAC output, DC off when 5v cut (Will DAC be ok?)
+
+
+
+FRAM DATA:
+
+0-0 - (byte) fs version, to throw error if mismatch
+
+
+8-9 - (int16) Schedule table location
+
+10-11 - (int16) Gamma correction table location
+
+12-13 - (int16) RGB profiles location
+14-14 - (int8) Number of RGB profiles
+
+15-16 - (int16) Fan profiles location
+17-17 - (int8) Number of fan profiles
+
+18-19 - (int16) FRAM strings location
+20-20 - (int8) FRAM string max length
+21-22 - (int16) FRAM string max address limit
+
+23-25 - (3 bytes - 1 byte per profile) Default RGB profiles
+26-31 - (6 bytes - 1 byte per profile) Default fan profiles
+
+32-47 - (16 bytes - 4 bytes per therm) Thermistor calibration values
+48-49 - (4 bytes - 4 bytes per LDR) LDR calibration values ???
+
+####### NEW - EXPERIMENT WITH THIS
+50-51 - (int16) RGB rates location - List of float values for speeds
+									 for RGB change, to allow different ramps / limits
+
+
+
+64-8256 - (8192 bytes - 4096 * int8) Gamma correction lookup table
+8500-??? - Schedule table
+9000-11310 - (2310 bytes - 77 bytes per profile) RGB profiles
+12000-12384 - (384 bytes - 32 bytes per profile) Fan profiles
+13000-14600 - (1600 bytes - 100?? * 16 byte strings) FRAM strings
+
+
+
+// RGB channel 0 (front case) - pwm 0, 1, 2
+// RGB channel 1 (main case) - pwm 3, 4, 5
+// RGB channel 2 (power and HDD LED) - pwm 6, 7, 8
+
+link == 0   DISABLED
+link == 1   Power and HDD LED
+link == 2   Front case
+
+DIY 1 = led_select 3 = rgb 2 = front panel
+DIY 2 = led_select 1 = rgb 0 = front case
+DIY 3 = led_select 2 = rgb 1 = main case
+DIY 6 = led_select 0 =  = all
+
+
+
+
+
+1.3 profile generator
+Generating gamma table
+Converting to bytes
+Gamma table generated: 8192 bytes.
+Generating RGB profile data
+RGB profile data created: 36 profiles, 2772 bytes.
+Generating fan profile data
+Fan profile data created: 6 profiles - 192 bytes.
+Generating FRAM string data
+FRAM string data generated: 63 strings - 1008 bytes.
+Generating calibration data
+Calibration data generated: 40 bytes.
+Generating lookup table
+Lookup table generated - 200 bytes.
+Making FRAM image
+Gamma table location: 200
+RGB data location: 8392
+Fan data location: 11164
+String data location: 11356
+Data size is 12364 bytes.
+File written.
+
+  //  0 - LCD 0x27
+  //  1 - EEPROM 0x50
+  //  2 - DAC_1 0x62
+  //  3 - DAC_2 0x62
+  //  4 - DAC_3 0x62
+  //  5 - DAC_4 0x62
+  //  6 - FRAM 0x50   PWM 0x40
+  //  7 - RTC 0x68
+
+
+
+
+
+ATtiny85:
+	input 1 (pin 3 / arduino 4) - from pwm 15
+	input 2 (pin 2 / arduino 3) - from pwm 14
+	input 3 (pin 1 / arduino 5) - from pwm 13 (CAUTION RESET)
+
+	output 1 (pin 5 / arduino 0) - to fan 4
+	output 2 (pin 6 / arduino 1) - to fan 5
+	output 3 (pin 7 / arduino 2) - to fan 6
+
+
+
+Fan controller coding stuff:
+
+- New display modes
+	- Fan speed percentage
+	- Manual (Host Computer)
+	- Dispay mode cycling
+		- Display cycle list
+		- Display cycle time
+- Brightness table lookup
+	- Manual creation (Host Computer)
+	- Write data to config
+- Fan speed mode
+	- Temperature lookup/receive
+		- Hysteresis
+		- Speed change rate
+	- Manual (Host Computer)
+	- Fixed
+- Debug
+	- Arduino CPU time
+	- Task completion time
+- Monitoring
+	- Temperature calibration?
+	- Fan RPM measure
+	- Fan RPM alert
+	- Temperature measure
+	- Temperature alert
+	- Brightness measure
+	- Alert methods
+		- Flash LCD
+		- Buzzer
+		- Flash LED strips
+- LED modes
+	- Built-in pattern format
+		- Fade
+		- Rate
+		- Colour sequence
+	- Brightness multiplier
+		- Real time
+		- Brightness measure
+	- Manual control
+		- IR Remote control
+		- Manual (Host Computer)
+- Reading config
+	- Backup config
+		- Copy FRAM to EEPROM
+		- Copy EEPROM to FRAM
+- Set clock time
+	- USB (Host Computer)
+	- Fallback compile time
+
+
+
+Strings (no critical ones):
+
+CMD ERR 2-1 - 558
+CMD ERR 2-2 - 583
+CMD ERR 1 - 588
+Load config - 886
+TH1:    - 1019
+TH2:    - 1023
+TH3:    - 1027
+TH4:    - 1031
+Fan  - 1046
+:  - 1048
+Incr bright - 1068
+Dec bright - 1072
+Pause - 1075
+Power - 1076
+RED - 1079
+GREEN - 1081
+BLUE - 1083
+WHITE - 1085
+Red 2 - 1088
+Green 2 - 1090
+Blue 2 - 1092
+White 2 - 1094
+Red 3 - 1097
+Green 3 - 1099
+Blue 3 - 1101
+White 3 - 1103
+Red 4 - 1106
+Green 4 - 1108
+Blue 4 - 1110
+White 4 - 1112
+Red 5 - 1115
+Green 5 - 1117
+Blue 5 - 1119
+White 5 - 1121
+Red Up - 1124
+Green Up - 1125
+Blue Up - 1126
+Speed Up - 1127
+Red Down - 1130
+Green Down - 1131
+Blue Down - 1132
+Speed Down - 1133
+DIY 1 - 1139
+DIY 2 - 1141
+DIY 3 - 1143
+Auto - 1146
+DIY 4 - 1153
+DIY 5 - 1154
+DIY 6 - 1155
+Flash - 1157
+Jump 3 - 1161
+Jump 7 - 1163
+Fade 3 - 1165
+Fade 7 - 1167
+IR ERR - 1171
+RPM ints:  - 1498
+Shutdown - 1551
+
+
+
+
+
+
+
+RGB profiles
+
+0 - Off
+
+1 - Red 1
+2 - Green 1
+3 - Blue 1
+4 - White 1
+
+5 - Red 2
+6 - Green 2
+7 - Blue 2
+8 - White 2
+
+9 - Red 3
+10 - Green 3
+11 - Blue 3
+12 - White 3
+
+13 - Red 4
+14 - Green 4
+15 - Blue 4
+16 - White 4
+
+17 - Red 5
+18 - Green 5
+19 - Blue 5
+20 - White 5
+
+21 - FLash
+22 - Jump3
+23 - Jump7
+24 - Fade3
+25 - Fade7
+
+
+
+
