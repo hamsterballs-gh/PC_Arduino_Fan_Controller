@@ -34,10 +34,12 @@ Code features:
 State of things:
 - Most of the Arduino code is feature complete.
 - The PCB design needs to be updated, but can be bodged to a working state.
+- Component values are often incorrect. A parts list needs to be made.
 - Basic Python Serial interaction is mostly working.
 
 
 Next major tasks:
+- Improve documentation and add a creation/installation guide.
 - Create a GUI in Python to enable easy setting of RGB and fan profiles, and read data.
 
 
