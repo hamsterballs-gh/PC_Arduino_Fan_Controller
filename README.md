@@ -2,22 +2,22 @@
 Arduino Fan and RGB Controller
 
 A repository in shambles!
-My documentation is minimal, there are issues and the Python code is not feature complete.
+This is heavily under construction and many things are yet to be added/fixed/sorted out.
 
-This project is for an Arduino-Nano based Fan and RGB controller.
+This project is for an Arduino-Nano based Fan and RGB controller, to fit in an old repurposed DVD Drive cage.
 
 Hardware features:
 - It can control 6 fans with PWM, of which channels 1-4 can use variable voltage DC.
 - It controls three separate 12v RGB channels. 2 are 12v, and 1 is 5v for LEDs to fit in the case.
 - RGB hard drive light - Two 2-pin connectors are used to use 2 HDD light inputs (I have a SAS card with a HDD light output). This controls the second 5v output.
 - Support for 4 temperature sensors.
-- Infra-red remote support, currently set to use the remotes that come with cheap Chinese RGB kits.
+- Infra-red remote support, currently set to use the 44 button remotes that come with cheap Chinese RGB kits.
 - Light sensor for auto LCD screen dimming.
 - 16x2 I2C LCD display, to display messages.
 - Read fan RPM from all channels.
 - Serial communication to PC over USB.
-- FRAM and EEPROM used for storing settings. EEPROM intended as backup, but this feature has not been added yet.
-- A buzzer (that I haven't got working, likely due to an incorrect transistor) to alert you. I have not programmed for this yet.
+- FRAM and EEPROM used for storing settings. EEPROM is used as a backup but must be restored manually with a serial command.
+- A buzzer for alerts. I have not programmed this yet.
 - Red LED indicator, typically lit up for serial transfers, IR commands and it will flash if the scheduler runs behind.
 - Real-time clock so the fan controller can display the time even after being powered off.
 
